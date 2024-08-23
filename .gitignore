@@ -1,5 +1,7 @@
 .env
 
+tests
+
 # Logs
 logs
 *.log
