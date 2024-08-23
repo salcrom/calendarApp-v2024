@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { calendarApi } from "../api";
+import { covertEventsToDateEvents } from "../helpers";
 import {
     onAddNewEvent,
     onDeleteEvent,
     onLoadEvents,
-    onSetActiveEvents,
+    onSetActiveEvent,
     onUpdateEvent,
 } from "../store";
-import { covertEventsToDateEvents } from "../helpers";
 
 export const useCalendarStore = () => {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export const useCalendarStore = () => {
     const { user } = useSelector((state) => state.auth);
 
     const setActiveEvent = (calendarEvent) => {
-        dispatch(onSetActiveEvents(calendarEvent));
+        dispatch(onSetActiveEvent(calendarEvent));
     };
 
     const startSavingEvent = async (calendarEvent) => {
@@ -56,6 +56,7 @@ export const useCalendarStore = () => {
     const startLoadingEvents = async () => {
         try {
             const { data } = await calendarApi.get("/events");
+            console.log({ data });
             const events = covertEventsToDateEvents(data.eventos);
             dispatch(onLoadEvents(events));
         } catch (error) {
@@ -66,8 +67,8 @@ export const useCalendarStore = () => {
 
     return {
         //* Propiedades
-        events,
         activeEvent,
+        events,
         hasEventSelected: !!activeEvent,
 
         //* Métodos
